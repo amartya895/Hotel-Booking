@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-
+     
       <Routes>
         <Route path="/home" exact Component={HomeScreen} />
         <Route path="/book/:roomid" exact Component={BookingScreen}/>
