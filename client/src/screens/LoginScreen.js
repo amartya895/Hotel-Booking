@@ -19,15 +19,7 @@ function LoginScreen() {
               console.log(error)
              }
     
-            // console.log(`${userData} logged Successfully`);
-            // console.log(`${userData} logged Successfully`);
-            // console.log(`${userData} logged Successfully`);
-            // console.log(`${userData} logged Successfully`);
-            // console.log(`${userData} logged Successfully`);
-            // console.log(`${userData} logged Successfully`);
-            // console.log(`${userData} logged Successfully`);
-            // console.log(`${userData} logged Successfully`);
-            // console.log(`${userData} logged Successfully`);
+            
         
     
     }
