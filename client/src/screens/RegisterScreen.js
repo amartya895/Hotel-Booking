@@ -1,11 +1,19 @@
 import React, { useState } from "react";
+import {Modal,Button} from 'react-bootstrap'
 import axios from "axios";
+import Loader from "../components/Loader";
+import Error from "../components/Error";
+import Success from "../components/Success";
 
 function RegisterScreen() {
     const [name , setName] = useState('');
     const [email , setemail] = useState('');
     const [password , setPassword] = useState('');
     const [cpassword , setCpassword] = useState('');
+    const [success , setSuccess] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState();
+    const [show, setShow] = useState(false);
 
     const Register = async()=>{
         if(password === cpassword)
@@ -15,9 +23,21 @@ function RegisterScreen() {
             }
     
            try {
+            setLoading(true)
             const result = (await axios.post('/api/users/register',userData)).data 
+            setLoading(false);
+            setSuccess(true) 
+            setShow(true);
+
+            setName('')
+            setemail('')
+            setPassword('')
+            setCpassword('')
+
            } catch (error) {
             console.log(error)
+            setError(true)
+            setLoading(false)
            }
         }
         else{
@@ -26,8 +46,14 @@ function RegisterScreen() {
     
     }
 
+    const handleClose = () => setShow(false);
+  
+
   return (
     <div>
+      {loading && <h1><Loader/></h1>}
+      {error && <h1><Error/></h1>}
+     
       <div className="row justify-content-center mt-5">
         <div className="col-md-5">
           <div className="box-shadow p-3 mt-5">
@@ -68,8 +94,26 @@ function RegisterScreen() {
           </div>
         </div>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        {success && <h1><Success message="Registration Successful"/></h1> }
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Login
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
+
+//make a modal popup for few second that reg success; with animated tick;
 
 export default RegisterScreen;

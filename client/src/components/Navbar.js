@@ -1,6 +1,8 @@
 import React from "react";
 
 function Navbar() {
+
+  const user = JSON.parse(localStorage.getItem('currentUser'))
   return (
     <div>
       <nav className="navbar navbar-expand-lg">
@@ -21,6 +23,18 @@ function Navbar() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
+              {user ? <>
+                <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="/profile">
+                  {user.name}
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/logout">
+                  Logout
+                </a>
+              </li>
+              </> : <>
               <li className="nav-item">
                 <a className="nav-link active" aria-current="page" href="/register">
                   Register
@@ -31,6 +45,7 @@ function Navbar() {
                   Login
                 </a>
               </li>
+              </>}
              
             </ul>
           </div>
