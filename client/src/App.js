@@ -13,7 +13,7 @@ function App() {
      
       <Routes>
         <Route path="/home" exact Component={HomeScreen} />
-        <Route path="/book/:roomid" exact Component={BookingScreen}/>
+        <Route path="/book/:roomid/:fromDate/:toDate" exact Component={BookingScreen}/>
         <Route path="/register" exact Component={RegisterScreen}/>
         <Route path="/login" exact Component={LoginScreen}/>
       </Routes>
