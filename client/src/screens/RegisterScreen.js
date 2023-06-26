@@ -42,6 +42,7 @@ function RegisterScreen() {
         }
         else{
             console.log("password didnt matched");
+            
         }
     
     }
@@ -52,10 +53,9 @@ function RegisterScreen() {
   return (
     <div>
       {loading && <h1><Loader/></h1>}
-      {error && <h1><Error/></h1>}
-     
       <div className="row justify-content-center mt-5">
         <div className="col-md-5">
+        {error && <h1><Error/></h1>}
           <div className="box-shadow p-3 mt-5">
             <h1 className="register-head">Register Here</h1>
             <input
@@ -96,7 +96,7 @@ function RegisterScreen() {
       </div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Successful</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         {success && <h1><Success message="Registration Successful"/></h1> }

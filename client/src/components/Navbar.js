@@ -2,7 +2,13 @@ import React from "react";
 
 function Navbar() {
 
+
   const user = JSON.parse(localStorage.getItem('currentUser'))
+
+  const handleLogout =()=>{
+    localStorage.removeItem('currentUser');
+    window.location.href ='/login';
+  }
   return (
     <div>
       <nav className="navbar navbar-expand-lg">
@@ -29,8 +35,13 @@ function Navbar() {
                   {user.name}
                 </a>
               </li>
+                <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="/booking">
+                Booking
+                </a>
+              </li>
               <li className="nav-item">
-                <a className="nav-link" href="/logout">
+                <a className="nav-link" onClick={handleLogout } >
                   Logout
                 </a>
               </li>
