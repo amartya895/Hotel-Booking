@@ -15,6 +15,7 @@ function HomeScreen() {
   const [error, setError] = useState();
   const [fromDate , setFromDate] = useState();
   const [toDate , setToDate] = useState();
+  const [dupilcateRooms , setDuplicateRooms] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +23,7 @@ function HomeScreen() {
         setLoading(true);
         const data = (await axios.get("/api/rooms/getAllRooms")).data;
         setRooms(data);
+        setDuplicateRooms(data)
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -32,10 +34,57 @@ function HomeScreen() {
     fetchData();
   }, []);
 
-  const filterByDate = (dates)=>{
-   setFromDate((dates[0].format('DD-MM-YYYY')));
-    setToDate((dates[1].format('DD-MM-YYYY')));
-  }
+  const filterByDate = (dates) => {
+     //from date
+     console.log(dates[0].format("DD-MM-YYYY"));
+     setFromDate(dates[0].format("DD-MM-YYYY"));
+     //to date
+     console.log(dates[1].format("DD-MM-YYYY"));
+     setToDate(dates[1].format("DD-MM-YYYY"));
+   
+     //tempRooms
+     var tempRooms = [];
+   
+     for (const room of dupilcateRooms) {
+       var availability = false;
+   
+       if (room.currentBookings.length > 0) {
+         for ( const booking of room.currentBookings) {
+           //check between or equal to dates
+           if (
+             !moment(moment(dates[0]).format("DD-MM-YYYY")).isBetween(
+               booking.fromDate,
+               booking.toDate
+             ) &&
+             !moment(moment(dates[1]).format("DD-MM-YYYY")).isBetween(
+               booking.fromDate,
+               booking.toDate
+             )
+           ) {
+             
+             if (
+               dates[0].format("DD-MM-YYYY") !== booking.fromDate &&
+               dates[0].format("DD-MM-YYYY") !== booking.toDate &&
+               dates[1].format("DD-MM-YYYY") !== booking.fromDate &&
+               dates[1].format("DD-MM-YYYY") !== booking.toDate
+             ) {
+               availability = true;
+             }
+           }
+         }
+       } else {
+         availability = true;
+       }
+   
+       if (availability === true) {
+         tempRooms.push(room);
+       }
+     }
+   
+     setRooms(tempRooms);
+  };
+  
+  
 
   return (
     <div className="container">
