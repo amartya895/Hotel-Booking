@@ -8,8 +8,6 @@ import moment from "moment";
 
 const { RangePicker } = DatePicker;
 
-// pk_test_51NOHfcSCaNtjKQutgNPvWOQ8Ipd942UWkuZAi6ce5hln5Mh5ukgdQYX7YAXMCChapeDn4DUXkRBiKV3QUBC0HrPS00vhRIdq2b
-
 function HomeScreen() {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState();
@@ -17,6 +15,8 @@ function HomeScreen() {
   const [fromDate, setFromDate] = useState();
   const [toDate, setToDate] = useState();
   const [dupilcateRooms, setDuplicateRooms] = useState();
+  const [Searchkey, setSearchKey] = useState();
+  const [type, setType] = useState("all");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,13 +84,56 @@ function HomeScreen() {
     setRooms(tempRooms);
   };
 
+  const filterBySearch = () => {
+    const tempRooms = dupilcateRooms.filter((room) =>
+      room.name.toLowerCase().includes(Searchkey.toLowerCase())
+    );
+
+    setRooms(tempRooms);
+  };
+
+  const filterByType = (e) => {
+    setType(e);
+    if (e !== "all") {
+      const tempRoom = dupilcateRooms.filter(
+        (room) => room.type.toLowerCase() === e.toLowerCase()
+      );
+      setRooms(tempRoom);
+    } else {
+      setRooms(dupilcateRooms);  
+    }
+  };
+
   return (
     <div className="container">
-      <div className="row">
-        <div className="col-md-3 mt-3">
+      <div className="row box-shadow">
+        <div className="col-md-3">
           <RangePicker format="DD-MM-YYYY" onChange={filterByDate} />
         </div>
+        <div className="col-md-5 ">
+          <input
+            type="text"
+            placeholder="Search rooms"
+            value={Searchkey}
+            className="form-control"
+            onChange={(e) => setSearchKey(e.target.value)}
+            onKeyUp={filterBySearch}
+          />
+        </div>
+        <div className="col-md-3">
+          <select
+            value={type}
+            onChange={(e) => {
+              filterByType(e.target.value);
+            }}
+          >
+            <option value="all">All</option>
+            <option value="delux">Delux</option>
+            <option value="non-delux">Non-Delux</option>
+          </select>
+        </div>
       </div>
+
       <div className="row justify-content-center mt-5">
         {loading ? (
           <Loader />

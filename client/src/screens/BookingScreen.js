@@ -5,6 +5,7 @@ import { Carousel } from "react-bootstrap";
 import Loader from "../components/Loader";
 import moment from "moment";
 import StripeCheckout from "react-stripe-checkout";
+import swal from 'sweetalert2';
 
 function BookingScreen() {
   const { roomid, fromDate, toDate } = useParams();
@@ -46,11 +47,18 @@ function BookingScreen() {
     };
 
     try {
+      setLoading(true)
       console.log(bookingDetails);
       const result = await axios.post("/api/bookings/bookroom", bookingDetails);
       console.log(result);
+      setLoading(false);
+      swal.fire('Congrulation' , 'Your Room Booked Successfully','success').then((result)=>{
+        window.location.href = '/bookings'
+      });
     } catch (error) {
+      setLoading(false)
       console.error(error);
+      swal.fire('Opps' , 'Something Went Wrong','error');
     }
   };
 

@@ -13,52 +13,43 @@ router.post("/bookroom", async (req, resp) => {
     req.body;
 
   try {
-    const customer = await stripe.customers.create({
-      email: token.email,
-      source: token.id,
+    const newBooking = new Booking({
+      room: room.name,
+      roomid: room._id,
+      userid: userid,
+      fromdate: fromDate,
+      todate: toDate,
+      totalamount: totalAmount,
+      totaldays: totalDays,
+      transactionid: "1234",
     });
 
-    const payment = await stripe.charges.create(
-      {
-        amount: totalAmount * 100,
-
-        customer: customer.id,
-        currency: "INR",
-        receipt_email: token.email,
-      },
-      {
-        idempotencyKey: uuidv4(),
-      }
-    );
-
-    if (payment) {
-      const newBooking = new Booking({
-        room: room.name,
-        roomid: room._id,
-        userid: userid,
-        fromdate: fromDate,
-        todate: toDate,
-        totalamount: totalAmount,
-        totaldays: totalDays,
-        transactionid: "1234",
-      });
-
-      const booking = await newBooking.save();
-      const roomtemp = await Room.findOne({ _id: room._id });
-      roomtemp.currentBookings.push({
-        bookingid: booking._id,
-        fromDate,
-        toDate,
-        userid: userid,
-        status: booking.status,
-      });
-      await roomtemp.save();
-    }
+    const booking = await newBooking.save();
+    const roomtemp = await Room.findOne({ _id: room._id });
+    roomtemp.currentBookings.push({
+      bookingid: booking._id,
+      fromDate,
+      toDate,
+      userid: userid,
+      status: booking.status,
+    });
+    await roomtemp.save();
 
     resp.send("Your Payment successfull, Booked Successfully");
   } catch (error) {
     return resp.status(400).json({ error });
   }
 });
+
+router.post('/getbookingbyuserid',async(req, resp)=>{
+  const userid = req.body.userid;
+
+  try {
+    const bookings = await Booking.find({userid :userid})
+    resp.send(bookings);
+  } catch (error) {
+    return resp.status(400).json({error});
+  }
+})
 
 module.exports = router;

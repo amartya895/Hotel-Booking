@@ -13,7 +13,7 @@ function Room({ room, FromDate, ToDate }) {
         <img src={room.imagesUrl[0]} className="smallimg" alt="" />
       </div>
       <div className="col-md-7">
-        <h1>{room.name}</h1>
+        <h1 className="name">{room.name}</h1>
         <b>
           <p>Max Count :{room.maxcount}</p>
           <p>Phone Number : {room.phoneNumber}</p>
