@@ -17,10 +17,13 @@ router.post('/register', async(req ,resp)=>{
 });
 
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body; // data which are comming through url is acces from req.body 
+    //and destructure to store in email and password
   
     try {
       const user = await User.findOne({ email, password });
+
+      //if there any user with email and password same it , will send back the user details ;
   
       if (user) {
         const temp = {
