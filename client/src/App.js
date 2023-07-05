@@ -5,7 +5,9 @@ import HomeScreen from "./screens/HomeScreen";
 import BookingScreen from "./screens/BookingScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
-import ProfileScreen from "./screens/ProfileScreen";
+import ProfileScreen, { MyBookings } from "./screens/ProfileScreen";
+import AdminScreen from "./screens/AdminScreen";
+import LandingScreen from './screens/LandingScreen';
 
 function App() {
   return (
@@ -18,6 +20,10 @@ function App() {
         <Route path="/register" exact Component={RegisterScreen}/>
         <Route path="/login" exact Component={LoginScreen}/>
         <Route path="/profile" exact Component={ProfileScreen}/>
+        <Route path="/bookings" exact Component={MyBookings}/>
+        <Route path="/admin" exact Component={AdminScreen}/>
+        <Route path="/" exact Component={LandingScreen}/>
+        
       </Routes>
     </div>
   );

@@ -40,5 +40,17 @@ router.post('/login', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+  router.get('/getallusers', async(req , resp)=>{
+
+      try {
+        
+        const userData = await User.find();
+        resp.send(userData);
+      } catch (error) {
+        console.log(error);
+      }
+
+  })
   
 module.exports = router

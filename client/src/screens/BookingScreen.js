@@ -19,6 +19,10 @@ function BookingScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if(!window.localStorage.getItem('currentUser'))
+      {
+        window.location.href= '/login';
+      }
       try {
         setLoading(true);
         const { data } = await axios.post("/api/rooms/getroombyid", { roomid });
@@ -98,7 +102,7 @@ function BookingScreen() {
               </b>
 
               <div>
-                <h1>Amount</h1>
+                <h1 className="head">Amount</h1>
                 <hr />
                 <b>
                   <p>Total Days: {totalDays + 1}</p>

@@ -3,6 +3,8 @@ import { Tabs } from "antd";
 import axios from "axios";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import swal from "sweetalert2";
+import { Tag } from 'antd';
 
 function ProfileScreen() {
   const tabStyles = {
@@ -70,6 +72,30 @@ export function MyBookings() {
     fetchData();
   }, [user._id]);
 
+  const cancleBooking = async (bookingid, roomid) => {
+    const data = {
+      bookingid,
+      roomid,
+    };
+
+    try {
+      setLoading(true);
+      const result = (await axios.post("/api/bookings/canclebooking", data))
+        .data;
+
+      setLoading(false);
+      swal
+        .fire("Congrats", "Your Booking Cancelled Successfully", "success")
+        .then((result) => {
+          window.location.reload();
+        });
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      swal.fire("oops", "Something Went wrong", "error");
+    }
+  };
+
   return (
     <div className="row">
       <div className="col-md-6">
@@ -81,6 +107,7 @@ export function MyBookings() {
               <div className="box-shadow">
                 <h4>{book.room}</h4>
                 <h5>Booking Id : {book._id}</h5>
+                <h5>Room Id : {book.roomid}</h5>
                 <p>
                   <b>Check In</b> : {book.fromdate}
                 </p>
@@ -92,10 +119,19 @@ export function MyBookings() {
                 </p>
                 <p>
                   Status :{" "}
-                  <b>{book.status == "booked" ? "CONFIRMED" : "CANCELLED"}</b>
+                  <b>{book.status === "booked" ? <Tag color="green">CONFIRMED</Tag> : <Tag color="red">CANCELLED</Tag>}</b>
                 </p>
 
-                <button className="btn btn-primary text-right">Cancle</button>
+                {book.status !== "CANCELLED" && (
+                  <button
+                    className="btn btn-primary text-right"
+                    onClick={() => {
+                      cancleBooking(book._id, book.roomid);
+                    }}
+                  >
+                    Cancle
+                  </button>
+                )}
               </div>
             );
           })}
